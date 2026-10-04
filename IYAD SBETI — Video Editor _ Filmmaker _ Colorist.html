@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JAMIN — Video Editor / Filmmaker / Colorist</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080a;--fg:#ece8e1;--mut:#8b8780;--line:#ffffff1c;--acc:#e0a458;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#07080a;--fg:#ece8e1}}
+*{box-sizing:border-box;margin:0}html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--fg);font:300 14px/1.7 Inter,system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3,.d{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;line-height:.95;letter-spacing:.01em}
+a{color:inherit;text-decoration:none}section{padding:14vh 6vw;position:relative}
+.lab{font-size:12px;letter-spacing:.3em;color:var(--acc);margin-bottom:22px;text-transform:uppercase}
+h2{font-size:clamp(32px,5.2vw,76px);max-width:14em}.intro{color:var(--mut);max-width:34em;margin-top:24px}
+nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:22px 6vw;transition:transform .5s,opacity .5s;mix-blend-mode:difference}
+nav.h{transform:translateY(-100%);opacity:0}nav .d{font-size:22px;letter-spacing:.2em}
+nav ul{display:flex;gap:28px;list-style:none;font-size:12px;letter-spacing:.25em;align-items:center}
+.play{display:flex;gap:8px;align-items:center;color:var(--acc);cursor:pointer}.play i{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.2}}
+.btn{display:inline-block;padding:14px 28px;font-size:11px;letter-spacing:.25em;border:1px solid var(--fg);cursor:pointer;background:none;color:var(--fg);transition:.3s;font-family:inherit}
+.btn.p{background:var(--fg);color:#000}.btn:hover{background:var(--acc);border-color:var(--acc);color:#000}
+/* placeholder frames */
+.ph{position:relative;width:100%;height:100%;min-height:100%;overflow:hidden;background:radial-gradient(120% 90% at 70% 30%,hsl(var(--h) 55% 38%),transparent 60%),radial-gradient(80% 60% at 15% 90%,hsl(calc(var(--h) + 40) 50% 18%),transparent 70%),linear-gradient(160deg,hsl(var(--h) 30% 10%),#050506)}
+.ph::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0000 0 2px,#0000000d 2px 3px);z-index:1}
+.ph::after{content:"";position:absolute;inset:0;box-shadow:inset 0 12vh 8vh -6vh #000,inset 0 -12vh 8vh -6vh #000,inset 0 0 14vh #000a}
+.ph span{position:absolute;left:18px;bottom:16px;z-index:2;font-size:10px;letter-spacing:.2em;color:#fff9;font-family:ui-monospace,monospace}
+/* hero */
+#hero{height:100vh;min-height:620px;padding:0;display:flex;align-items:flex-end}
+#hero .bg{position:absolute;inset:0;animation:kb 24s ease-in-out infinite alternate}#hero .bg .ph{--h:28}
+@keyframes kb{to{transform:scale(1.1) translateX(-2%)}}
+#hero .ov{position:absolute;inset:0;background:linear-gradient(0deg,#07080a 0,#07080a66 40%,#0006)}
+.hc{position:relative;z-index:2;padding:0 6vw 9vh;width:100%}
+#hero h1{font-size:clamp(64px,15vw,220px);letter-spacing:.04em}
+.sub{letter-spacing:.35em;font-size:clamp(10px,1.1vw,12px);margin:10px 0 22px}.tag{font-size:clamp(15px,1.6vw,20px);font-style:italic;color:#ece8e1cc;margin-bottom:34px}
+.hc .row{display:flex;gap:16px;flex-wrap:wrap}.small{margin-top:30px;font-size:11px;letter-spacing:.25em;color:var(--mut)}
+/* showreel */
+.reel{margin-top:60px;aspect-ratio:21/9;position:relative;cursor:pointer;border:1px solid var(--line)}
+.reel .btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3}
+.reel .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--acc);width:0;z-index:4}.reel.on .bar{animation:b 30s linear forwards}@keyframes b{to{width:100%}}
+.meta{margin-top:22px;font-size:12px;letter-spacing:.3em;color:var(--mut)}
+/* work */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:40px 24px;margin-top:70px}
+.card{grid-column:span 6;cursor:pointer}.card:nth-child(3n+1){grid-column:span 7}.card:nth-child(3n+2){grid-column:span 5;margin-top:80px}.card:nth-child(3n){grid-column:span 12}
+.card .fr{aspect-ratio:16/9;overflow:hidden}.card .fr .ph{transition:transform 1.2s cubic-bezier(.2,.7,.2,1),filter .6s;filter:saturate(.7)}.card:hover .ph{transform:scale(1.07);filter:none}
+.card h3{font-size:clamp(22px,2.6vw,36px);margin-top:18px}.card .m{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.25em;color:var(--acc);margin-top:8px}
+.card p{color:var(--mut);font-size:13px;max-width:36em;margin-top:8px}.card .t{font-size:10px;letter-spacing:.22em;color:#ece8e166;margin-top:10px}
+/* detail */
+#det{position:fixed;inset:0;z-index:80;background:var(--bg);overflow-y:auto;transform:translateY(100%);transition:transform .8s cubic-bezier(.7,0,.2,1);padding:12vh 6vw 10vh}
+#det.on{transform:none}#det .x{position:fixed;top:calc(22px + env(safe-area-inset-top,0px));right:6vw;z-index:2;font-size:12px;letter-spacing:.25em;cursor:pointer}
+#det h2{font-size:clamp(40px,7vw,100px)}#det .vid{aspect-ratio:21/9;margin:40px 0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;margin:50px 0}.cols h4{font:500 11px Inter;letter-spacing:.3em;color:var(--acc);margin-bottom:14px}.cols li{list-style:none;font-size:16px}
+.stills{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:40px 0}.stills>div{aspect-ratio:16/10}
+/* color */
+.cmp{margin-top:70px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px}
+.cp{position:relative;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--line)}.cp .a{position:absolute;inset:0}.cp .b{position:absolute;inset:0;clip-path:inset(0 50% 0 0)}.cp .b .ph{filter:saturate(.15) contrast(.75) brightness(1.15)}
+.cp input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;z-index:5}.cp .ln{position:absolute;top:0;bottom:0;left:50%;width:1px;background:#fff;z-index:4}
+.cp .lb{position:absolute;top:14px;font-size:10px;letter-spacing:.25em;z-index:4;color:#fff}.cmp h3{font-size:20px;margin:14px 0 0;letter-spacing:.08em}
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:16vw;gap:12px;margin-top:60px}
+.gal>div{position:relative;overflow:hidden}.gal>div:nth-child(1){grid-column:span 3;grid-row:span 2}.gal>div:nth-child(2),.gal>div:nth-child(3){grid-column:span 3}.gal>div:nth-child(4){grid-column:span 2}.gal>div:nth-child(5){grid-column:span 2}.gal>div:nth-child(6){grid-column:span 2}
+.caps{display:flex;flex-wrap:wrap;gap:12px 40px;margin-top:40px;font-size:13px;letter-spacing:.35em;color:var(--mut)}
+/* about */
+.ab{display:grid;grid-template-columns:1fr 1.2fr;gap:6vw;align-items:center}.ab .pt{aspect-ratio:4/5}.ab p{color:#ece8e1bb;margin-top:22px;max-width:32em}
+.st{display:flex;gap:50px;margin-top:44px}.st b{display:block;font:400 44px/1 'Bebas Neue',Impact;color:var(--acc)}.st span{font-size:11px;letter-spacing:.25em;color:var(--mut)}
+/* skills */
+.sk{margin-top:50px;display:flex;flex-wrap:wrap;gap:0 4vw;font:400 clamp(22px,3.4vw,48px)/1.25 'Bebas Neue',Impact;color:#ece8e133}.sk span{transition:.4s}.sk span:hover{color:var(--fg)}
+.sw{margin-top:40px;font-size:12px;letter-spacing:.3em;color:var(--acc);display:flex;gap:30px;flex-wrap:wrap}
+/* services */
+.sv{margin-top:60px;border-top:1px solid var(--line)}.sv div{display:grid;grid-template-columns:80px 1fr 1.2fr;gap:20px;padding:34px 0;border-bottom:1px solid var(--line);align-items:baseline;transition:.4s}.sv div:hover{padding-left:20px;color:var(--acc)}
+.sv i{font-style:normal;color:var(--mut);font-size:12px;letter-spacing:.2em}.sv h3{font-size:clamp(22px,2.6vw,36px)}.sv p{color:var(--mut)}
+/* contact */
+#contact{text-align:center;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:radial-gradient(60% 50% at 50% 100%,#e0a45826,transparent)}
+#contact h2{font-size:clamp(40px,8vw,120px);max-width:none}#contact h3{font-size:clamp(15px,2vw,26px);color:var(--acc);margin:20px 0;letter-spacing:.1em}
+#contact .em{display:block;margin:34px 0 20px;font-size:16px;border-bottom:1px solid var(--line)}.so{display:flex;gap:30px;font-size:12px;letter-spacing:.25em;color:var(--mut);margin-top:30px}.so a:hover{color:var(--acc)}
+footer{padding:50px 6vw calc(40px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;font-size:11px;letter-spacing:.22em;color:var(--mut)}footer .d{font-size:26px;color:var(--fg);letter-spacing:.2em}
+footer nav{all:unset}footer ul{display:flex;gap:24px;list-style:none}
+/* davinci hero image */
+.dv{position:absolute;z-index:1;right:5vw;top:14vh;width:min(46vw,720px);aspect-ratio:16/10;background:#0b0c0f;border:1px solid #ffffff24;border-radius:8px;box-shadow:0 40px 120px #000,0 0 90px #e0a4582e;display:grid;grid-template-rows:auto 1fr 40%;overflow:hidden;transform:perspective(1400px) rotateY(-14deg) rotateX(4deg);animation:fl 8s ease-in-out infinite alternate}
+@keyframes fl{to{transform:perspective(1400px) rotateY(-8deg) rotateX(2deg) translateY(-12px)}}
+.dv .tb{display:flex;gap:6px;align-items:center;padding:6px 10px;background:#14161a;font-size:8px;letter-spacing:.2em;color:#8b8780}.dv .tb i{width:7px;height:7px;border-radius:50%;background:#ff5f57}.dv .tb i+i{background:#febc2e}.dv .tb i+i+i{background:#28c840}.dv .tb b{margin-left:auto;font-weight:400;color:var(--acc)}
+.dv .mid{display:grid;grid-template-columns:1.7fr 1fr;gap:6px;padding:6px;min-height:0}.dv .vw{position:relative;border:1px solid #fff1;overflow:hidden}
+.dv .wh{background:#111317;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;align-content:center}.dv .wh i{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#111317 38%,#0000 40%),conic-gradient(#e44,#ee4,#4e4,#4ee,#44e,#e4e,#e44);opacity:.7;position:relative}.dv .wh i:nth-child(4){opacity:.3}
+.dv .tl{position:relative;background:#101215;border-top:1px solid #fff1;padding:6px;display:flex;flex-direction:column;gap:4px;justify-content:center}.dv .tl div{display:flex;gap:3px;height:20%}.dv .tl span{border-radius:2px;opacity:.85}
+.dv .tl::after{content:"";position:absolute;left:38%;top:0;bottom:0;width:1px;background:#f44;box-shadow:0 0 8px #f44}
+@media(max-width:800px){.dv{width:90vw;right:5vw;top:11vh;opacity:.7;transform:none;animation:none}}
+/* reels */
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:50px}.tabs button{font:inherit;font-size:11px;letter-spacing:.25em;padding:10px 20px;border:1px solid var(--line);background:none;color:var(--mut);cursor:pointer;transition:.3s}
+.tabs button.on,.tabs button:hover{background:var(--fg);color:#000;border-color:var(--fg)}
+.rl{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:36px 20px;padding:40px 0 20px}
+.rc{cursor:pointer}.rc .fr{aspect-ratio:9/16;position:relative;overflow:hidden;border:1px solid var(--line)}
+.rc .ph{transition:transform 1s,filter .5s;filter:saturate(.7)}.rc:hover .ph{transform:scale(1.08);filter:none}
+.rc .vw{position:absolute;top:14px;left:14px;z-index:3;font-size:10px;letter-spacing:.2em}.rc .pl{position:absolute;right:14px;top:14px;z-index:3;width:34px;height:34px;border:1px solid #fff8;border-radius:50%;display:grid;place-items:center;font-size:11px}
+.rc .pg{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--acc);z-index:4}.rc:hover .pg{animation:b 6s linear infinite}
+.rc h4{font:400 20px/1 'Bebas Neue',Impact;letter-spacing:.06em;margin-top:14px}.rc small{display:block;font-size:10px;letter-spacing:.22em;color:var(--acc);margin-top:6px}
+#rm{position:fixed;inset:0;z-index:90;background:#000e;display:none;place-items:center;padding:20px}#rm.on{display:grid}#rm .box{height:min(86vh,760px);aspect-ratio:9/16;max-width:94vw;position:relative;border:1px solid var(--line)}#rm .box .btn{position:absolute;top:-52px;right:0;padding:8px 16px}
+.rv{opacity:0;transform:translateY(40px);transition:1.1s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
+@media(max-width:800px){nav ul li:not(.play){display:none}.card,.card:nth-child(n){grid-column:span 12;margin-top:0}.ab{grid-template-columns:1fr}.sv div{grid-template-columns:1fr}.gal{grid-auto-rows:30vw}.stills{grid-template-columns:1fr}}
+</style></head><body>
+<nav id="nav"><a href="#hero" class="d">JAMIN</a><ul><li><a href="#work">WORK</a></li><li><a href="#reels">REELS</a></li><li><a href="#about">ABOUT</a></li><li><a href="#services">SERVICES</a></li><li><a href="#contact">CONTACT</a></li><li class="play" onclick="playReel()"><i></i>PLAY</li></ul></nav>
+
+<section id="hero"><div class="bg"><div class="ph"><span>SHOWREEL_VIDEO.mp4</span></div></div><div class="ov"></div>
+<!-- Replace this whole .dv block with: <img class="dv" src="DAVINCI_EDIT_SCREENSHOT.png" alt="DaVinci Resolve edit"> -->
+<div class="dv" aria-label="DaVinci Resolve editing screen"><div class="tb"><i></i><i></i><i></i>&nbsp; THE_LAST_LIGHT — EDIT <b>DAVINCI RESOLVE</b></div>
+<div class="mid"><div class="vw" id="dvv"></div><div class="wh"><i></i><i></i><i></i><i></i></div></div><div class="tl" id="dtl"></div></div>
+<div class="hc"><h1>JAMIN</h1><div class="sub">VIDEO EDITOR / FILMMAKER / COLORIST</div><p class="tag">I turn raw footage into stories worth watching.</p>
+<div class="row"><button class="btn p" onclick="playReel()">WATCH SHOWREEL</button><a class="btn" href="#work">EXPLORE MY WORK</a></div>
+<p class="small">BASED IN ALGERIA · AVAILABLE FOR CREATIVE PROJECTS</p></div></section>
+
+<section id="showreel"><div class="lab rv">01 / Showreel</div><h2 class="rv">A COLLECTION OF MOMENTS, CUT TOGETHER.</h2>
+<p class="intro rv">A selection of my latest work in editing, filmmaking, color and visual storytelling.</p>
+<div class="reel rv" id="reel" onclick="playReel()"><div class="ph" style="--h:20"><span>SHOWREEL_2026.mp4</span></div><button class="btn p" id="rb">PLAY SHOWREEL</button><div class="bar"></div></div>
+<div class="meta">EDITING — FILMMAKING — COLOR — STORYTELLING</div></section>
+
+<section id="work"><div class="lab rv">02 / Selected Work</div><h2 class="rv">RECENT PROJECTS</h2><p class="intro rv">A selection of personal projects, film edits and creative work.</p><div class="grid" id="grid"></div></section>
+
+<div id="det"><div class="x" onclick="closeP()">CLOSE ✕</div><div id="dc"></div></div>
+
+<section id="reels"><div class="lab rv">Short-Form / Reels</div><h2 class="rv">REELS &amp; SHORT-FORM EDITS.</h2>
+<p class="intro rv">Fast, rhythm-driven edits made for Instagram, TikTok and YouTube Shorts.</p>
+<div class="tabs rv" id="tabs"></div><div class="rl" id="rl"></div></section>
+<div id="rm" onclick="if(event.target===this)closeR()"><div class="box" id="rb2"></div></div>
+
+<section id="color"><div class="lab rv">03 / Color</div><h2 class="rv">COLOR IS STORY.</h2>
+<p class="intro rv">The grade changes how a scene feels. I use color, contrast and light to build atmosphere and emotion.</p><div class="cmp" id="cmp"></div></section>
+
+<section id="bts"><div class="lab rv">04 / Behind the Camera</div><h2 class="rv">BEFORE THE EDIT, THERE'S THE FRAME.</h2>
+<p class="intro rv">I enjoy being involved in the entire visual process — from capturing footage to shaping the final story.</p><div class="gal" id="gal"></div>
+<div class="caps"><span>LIGHT</span><span>COMPOSITION</span><span>MOVEMENT</span><span>ATMOSPHERE</span><span>STORY</span></div></section>
+
+<section id="about"><div class="ab"><div class="pt rv"><div class="ph" style="--h:30"><span>JAMIN_PORTRAIT.jpg</span></div></div>
+<div><div class="lab rv">05 / About</div><h2 class="rv">WHO'S BEHIND THE FRAME?</h2>
+<p class="rv">I'm Jamin, a video editor and filmmaker focused on cinematic storytelling.</p><p class="rv">I enjoy taking raw footage and turning it into something that has rhythm, emotion and personality.</p><p class="rv">My work focuses on editing, filmmaking, color grading and creating visual content that feels intentional.</p>
+<div class="st rv"><div><b>20+</b><span>PROJECTS</span></div><div><b>3+</b><span>YEARS CREATING</span></div><div><b>∞</b><span>IDEAS</span></div></div></div></div></section>
+
+<section id="skills"><h2 class="rv">TOOLS OF THE CRAFT</h2>
+<div class="sk rv"><span>VIDEO EDITING</span><span>COLOR GRADING</span><span>CINEMATOGRAPHY</span><span>STORYTELLING</span><span>SOUND DESIGN</span><span>SHORT-FORM CONTENT</span></div>
+<div class="sw rv"><span>DAVINCI RESOLVE</span><span>ADOBE PREMIERE PRO</span><span>AFTER EFFECTS</span><span>PHOTOSHOP</span></div></section>
+
+<section id="services"><div class="lab rv">06 / Services</div><h2 class="rv">WHAT I CAN CREATE</h2><div class="sv rv">
+<div><i>01</i><h3>VIDEO EDITING</h3><p>Turning raw footage into a structured and engaging story.</p></div>
+<div><i>02</i><h3>CINEMATIC CONTENT</h3><p>Short cinematic videos for brands, creators and personal projects.</p></div>
+<div><i>03</i><h3>COLOR GRADING</h3><p>Building atmosphere and visual consistency through color.</p></div>
+<div><i>04</i><h3>SHORT-FORM CONTENT</h3><p>Fast, engaging edits designed for Instagram, TikTok and YouTube Shorts.</p></div>
+<div><i>05</i><h3>FILM EDITING</h3><p>Story-driven editing for short films and personal filmmaking projects.</p></div></div></section>
+
+<section id="contact"><div class="lab rv">07 / Contact</div><h2 class="rv">HAVE A STORY TO TELL?</h2><h3 class="rv">LET'S MAKE IT WORTH WATCHING.</h3>
+<p class="intro rv">Have a project, idea or collaboration in mind?<br>I'd love to hear about it.</p>
+<a class="em" href="mailto:hello@yourdomain.com">hello@yourdomain.com</a><a class="btn p" href="mailto:hello@yourdomain.com">START A PROJECT</a>
+<div class="so"><a href="#">INSTAGRAM</a><a href="#">YOUTUBE</a><a href="#">TIKTOK</a><a href="#">BEHANCE</a></div></section>
+
+<footer><div><div class="d">JAMIN</div>VIDEO EDITOR · FILMMAKER · COLORIST</div>
+<ul><li><a href="#work">WORK</a></li><li><a href="#about">ABOUT</a></li><li><a href="#services">SERVICES</a></li><li><a href="#contact">CONTACT</a></li></ul>
+<div>© 2026 JAMIN — ALL RIGHTS RESERVED<br>CUT. COLOR. CREATE.</div></footer>
+
+<script>
+const P=[
+["THE LAST LIGHT","CINEMATIC EDIT","2026","A short cinematic edit focused on atmosphere, pacing and natural light.","PROJECT_01_THE_LAST_LIGHT.mp4","EDITING / COLOR / SOUND DESIGN",32],
+["MIDNIGHT IN ALGIERS","FILMMAKING","2026","A night-time visual study exploring city lights, movement and urban atmosphere.","PROJECT_02_MIDNIGHT_ALGIERS.mp4","CINEMATOGRAPHY / EDITING / COLOR",225],
+["AFTER THE RAIN","COLOR GRADING","2026","A color-focused project exploring contrast, shadows and a cold cinematic atmosphere.","PROJECT_03_AFTER_THE_RAIN.mp4","COLOR / EDITING",200],
+["NO SIGNAL","SHORT-FORM EDIT","2026","A fast-paced social media edit designed around rhythm, music and visual impact.","PROJECT_04_NO_SIGNAL.mp4","SHORT-FORM / EDITING / SOUND",340],
+["MEMORIES OF SUMMER","PERSONAL FILM","2025","A personal short film built around memories, movement and everyday moments.","PROJECT_05_MEMORIES_OF_SUMMER.mp4","FILMMAKING / EDITING / COLOR",45],
+["CITY FRAGMENTS","CINEMATIC CONTENT","2025","A collection of urban shots edited into a short visual story.","PROJECT_06_CITY_FRAGMENTS.mp4","CINEMATOGRAPHY / EDITING",260]];
+const ph=(n,h)=>`<div class="ph" style="--h:${h}"><span>${n}</span></div>`;
+const $=s=>document.querySelector(s);
+$('#grid').innerHTML=P.map((p,i)=>`<div class="card rv" onclick="openP(${i})"><div class="fr">${ph(p[4],p[6])}</div><h3>${p[0]}</h3><div class="m"><span>${p[1]}</span><span>${p[2]}</span></div><p>${p[3]}</p><div class="t">${p[5]}</div></div>`).join('');
+const G=[["COLD / ATMOSPHERIC","GRADE_01",205],["WARM / NOSTALGIC","GRADE_02",30],["DARK / MOODY","GRADE_03",290]];
+$('#cmp').innerHTML=G.map(g=>`<div class="rv"><div class="cp"><div class="a">${ph(g[1]+'_FINAL.jpg',g[2])}</div><div class="b">${ph(g[1]+'_RAW.jpg',g[2])}</div><div class="ln"></div><span class="lb" style="left:14px">BEFORE</span><span class="lb" style="right:14px">AFTER</span><input type="range" min="0" max="100" value="50" aria-label="Before/after"></div><h3>${g[0]}</h3></div>`).join('');
+document.querySelectorAll('.cp').forEach(c=>{const i=c.querySelector('input');i.oninput=()=>{c.querySelector('.b').style.clipPath=`inset(0 ${100-i.value}% 0 0)`;c.querySelector('.ln').style.left=i.value+'%'}});
+$('#gal').innerHTML=[["CAMERA_01.jpg",35],["CAMERA_02.jpg",210],["CAMERA_03.jpg",15],["CAMERA_04.jpg",260],["BTS_01.jpg",40],["BTS_02.jpg",190]].map(a=>`<div class="rv">${ph(a[0],a[1])}</div>`).join('');
+/* REELS — add a new reel by adding one line: [title, category, views, filename, hue] */
+const R=[
+["NO SIGNAL","SOCIAL","48K","REEL_01_NO_SIGNAL.mp4",340],
+["NIGHT DRIVE","CINEMATIC","31K","REEL_02_NIGHT_DRIVE.mp4",225],
+["BEAT DROP","MUSIC","92K","REEL_03_BEAT_DROP.mp4",15],
+["GOLDEN HOUR","CINEMATIC","27K","REEL_04_GOLDEN_HOUR.mp4",38],
+["CITY PULSE","SOCIAL","64K","REEL_05_CITY_PULSE.mp4",200],
+["RHYTHM CUT","MUSIC","18K","REEL_06_RHYTHM_CUT.mp4",290]];
+function showR(f){$('#tabs').innerHTML=['ALL',...new Set(R.map(r=>r[1]))].map(t=>`<button class="${t===f?'on':''}" onclick="showR('${t}')">${t}</button>`).join('');
+$('#rl').innerHTML=R.map((r,i)=>[r,i]).filter(([r])=>f==='ALL'||r[1]===f).map(([r,i])=>`<div class="rc" onclick="openR(${i})"><div class="fr">${ph(r[3],r[4])}<span class="vw">▶ ${r[2]}</span><span class="pl">▶</span><div class="pg"></div></div><h4>${r[0]}</h4><small>${r[1]} · 9:16</small></div>`).join('')}
+showR('ALL');
+function openR(i){$('#rb2').innerHTML=`<button class="btn" onclick="closeR()">CLOSE ✕</button>${ph(R[i][3],R[i][4])}`;$('#rm').classList.add('on')}
+function closeR(){$('#rm').classList.remove('on')}
+$('#dvv').innerHTML=ph('DAVINCI_EDIT_SCREENSHOT.png',28);
+$('#dtl').innerHTML=[[['#c8893f',30,'#8a5a2b',18,'#c8893f',24,'#5b6f86',28],'V2'],[['#8a5a2b',16,'#c8893f',34,'#5b6f86',22,'#c8893f',28],'V1'],[['#2f7d6d',40,'#2f7d6d',25,'#2f7d6d',35],'A1'],[['#7a4e8c',55,'#7a4e8c',45],'A2']].map(t=>`<div>${t[0].map((v,i)=>i%2?'':`<span style="background:${v};flex:${t[0][i+1]}"></span>`).join('')}</div>`).join('');
+let cur=0;
+function openP(i){cur=i;const p=P[i],n=P[(i+1)%P.length];
+$('#dc').innerHTML=`<div class="lab">${p[1]} · ${p[2]}</div><h2>${p[0]}</h2><div class="vid">${ph('PROJECT_VIDEO.mp4 — '+p[4],p[6])}</div>
+<p class="intro" style="max-width:40em;font-size:16px;color:var(--fg)">The goal of this project was to create a quiet cinematic atmosphere using pacing, music and natural light.</p>
+<div class="cols"><div><h4>MY ROLE</h4><ul><li>Video Editing</li><li>Color Grading</li><li>Sound Design</li></ul></div><div><h4>TOOLS</h4><ul><li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>After Effects</li></ul></div><div><h4>CREATIVE DIRECTION</h4><p style="color:var(--mut)">Slow pacing, minimal transitions and a warm cinematic grade were used to emphasize the atmosphere of the footage.</p></div></div>
+<div class="stills">${[1,2,3].map(k=>`<div>${ph('PROJECT_STILL_0'+k+'.jpg',p[6]+k*12)}</div>`).join('')}</div>
+<button class="btn p" onclick="openP(${(i+1)%P.length});$('#det').scrollTo(0,0)">NEXT PROJECT → ${n[0]}</button>`;
+$('#det').classList.add('on');$('#det').scrollTo(0,0);document.body.style.overflow='hidden'}
+function closeP(){$('#det').classList.remove('on');document.body.style.overflow=''}
+addEventListener('keydown',e=>e.key==='Escape'&&closeP());
+function playReel(){const r=$('#reel');r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.remove('on');void r.offsetWidth;r.classList.add('on');$('#rb').textContent='▶ NOW PLAYING'}
+let ly=0;addEventListener('scroll',()=>{const y=scrollY,n=$('#nav');n.classList.toggle('h',y>ly&&y>innerHeight*.8);ly=y},{passive:true});
+const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('in')),{threshold:.12});
+document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+</script></body></html>
