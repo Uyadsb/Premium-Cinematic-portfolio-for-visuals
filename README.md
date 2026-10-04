@@ -1,6 +1,6 @@
 # JAMIN — Cinematic Portfolio
 
-A premium, film-style portfolio website for **JAMIN**: Video Editor, Filmmaker, Colorist and Content Creator.
+A premium, film-style portfolio website for : Video Editor, Filmmaker, Colorist and Content Creator.
 Built as a single `index.html` file with no frameworks and no build step.
 
 ## Features
