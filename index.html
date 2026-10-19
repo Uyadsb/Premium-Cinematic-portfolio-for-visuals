@@ -47,7 +47,7 @@ nav ul{display:flex;gap:28px;list-style:none;font-size:12px;letter-spacing:.25em
 /* detail */
 #det{position:fixed;inset:0;z-index:80;background:var(--bg);overflow-y:auto;transform:translateY(100%);transition:transform .8s cubic-bezier(.7,0,.2,1);padding:12vh 6vw 10vh}
 #det.on{transform:none}#det .x{position:fixed;top:calc(22px + env(safe-area-inset-top,0px));right:6vw;z-index:2;font-size:12px;letter-spacing:.25em;cursor:pointer}
-#det h2{font-size:clamp(40px,7vw,100px)}#det .vid{aspect-ratio:21/9;margin:40px 0}
+#det h2{font-size:clamp(40px,7vw,100px)}#det .vid{margin:40px 0}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;margin:50px 0}.cols h4{font:500 11px Inter;letter-spacing:.3em;color:var(--acc);margin-bottom:14px}.cols li{list-style:none;font-size:16px}
 .stills{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:40px 0}.stills>div{aspect-ratio:16/10}
 /* color */
@@ -95,6 +95,8 @@ footer nav{all:unset}footer ul{display:flex;gap:24px;list-style:none}
 #rm{position:fixed;inset:0;z-index:90;background:#000e;display:none;place-items:center;padding:20px}#rm.on{display:grid}#rm .box{height:min(86vh,760px);aspect-ratio:9/16;max-width:94vw;position:relative;border:1px solid var(--line)}#rm .box .btn{position:absolute;top:-52px;right:0;padding:8px 16px}
 .rv{opacity:0;transform:translateY(40px);transition:1.1s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
 @media(max-width:800px){nav ul li:not(.play){display:none}.card,.card:nth-child(n){grid-column:span 12;margin-top:0}.ab{grid-template-columns:1fr}.sv div{grid-template-columns:1fr}.gal{grid-auto-rows:30vw}.stills{grid-template-columns:1fr}}
+.vid{position:relative;aspect-ratio:16/9}.reel.v{aspect-ratio:16/9;cursor:default}
+.vid iframe,.vid video,.reel iframe,.reel video,#rb2 iframe,#rb2 video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 </style></head><body>
 <nav id="nav"><a href="#hero" class="d">JAMIN</a><ul><li><a href="#work">WORK</a></li><li><a href="#reels">REELS</a></li><li><a href="#about">ABOUT</a></li><li><a href="#services">SERVICES</a></li><li><a href="#contact">CONTACT</a></li><li class="play" onclick="playReel()"><i></i>PLAY</li></ul></nav>
 
@@ -126,7 +128,7 @@ footer nav{all:unset}footer ul{display:flex;gap:24px;list-style:none}
 <section id="bts"><div class="lab rv">04 / Behind the Camera</div><h2 class="rv">BEFORE THE EDIT, THERE'S THE FRAME.</h2>
 <p class="intro rv">I enjoy being involved in the entire visual process — from capturing footage to shaping the final story.</p><div class="gal" id="gal"></div>
 <div class="caps"><span>LIGHT</span><span>COMPOSITION</span><span>MOVEMENT</span><span>ATMOSPHERE</span><span>STORY</span></div></section>
-  
+
 <section id="about"><div class="ab"><div class="pt rv"><div class="ph" style="--h:30"><span>JAMIN_PORTRAIT.jpg</span></div></div>
 <div><div class="lab rv">05 / About</div><h2 class="rv">WHO'S BEHIND THE FRAME?</h2>
 <p class="rv">I'm Jamin, a video editor and filmmaker focused on cinematic storytelling.</p><p class="rv">I enjoy taking raw footage and turning it into something that has rhythm, emotion and personality.</p><p class="rv">My work focuses on editing, filmmaking, color grading and creating visual content that feels intentional.</p>
@@ -153,6 +155,19 @@ footer nav{all:unset}footer ul{display:flex;gap:24px;list-style:none}
 <div>© 2026 JAMIN — ALL RIGHTS RESERVED<br>CUT. COLOR. CREATE.</div></footer>
 
 <script>
+/* ============ YOUR VIDEOS — paste links here ============
+   Accepts YouTube (watch, youtu.be, shorts), Vimeo, or a direct .mp4 path.
+   Leave "" to keep the placeholder. Order matches the lists below. */
+const VIDEO={
+showreel:"",
+projects:["","","","","",""],   // 1 THE LAST LIGHT, 2 MIDNIGHT IN ALGIERS, 3 AFTER THE RAIN, 4 NO SIGNAL, 5 MEMORIES OF SUMMER, 6 CITY FRAGMENTS
+reels:["","","","","",""]       // 1 NO SIGNAL, 2 NIGHT DRIVE, 3 BEAT DROP, 4 GOLDEN HOUR, 5 CITY PULSE, 6 RHYTHM CUT
+};
+function embed(u,a){let m;
+if(m=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{11})/))return`https://www.youtube-nocookie.com/embed/${m[1]}?rel=0&modestbranding=1&playsinline=1${a?'&autoplay=1':''}`;
+if(m=u.match(/vimeo\.com\/(?:video\/)?(\d+)(?:\/([a-f0-9]+))?/))return`https://player.vimeo.com/video/${m[1]}?${m[2]?'h='+m[2]+'&':''}title=0&byline=0&portrait=0${a?'&autoplay=1':''}`;
+return u}
+const vf=(u,a,t)=>/\.(mp4|webm)(\?|$)/i.test(u)?`<video src="${u}" controls playsinline ${a?'autoplay':''}></video>`:`<iframe src="${embed(u,a)}" title="${t}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
 const P=[
 ["THE LAST LIGHT","CINEMATIC EDIT","2026","A short cinematic edit focused on atmosphere, pacing and natural light.","PROJECT_01_THE_LAST_LIGHT.mp4","EDITING / COLOR / SOUND DESIGN",32],
 ["MIDNIGHT IN ALGIERS","FILMMAKING","2026","A night-time visual study exploring city lights, movement and urban atmosphere.","PROJECT_02_MIDNIGHT_ALGIERS.mp4","CINEMATOGRAPHY / EDITING / COLOR",225],
@@ -178,21 +193,21 @@ const R=[
 function showR(f){$('#tabs').innerHTML=['ALL',...new Set(R.map(r=>r[1]))].map(t=>`<button class="${t===f?'on':''}" onclick="showR('${t}')">${t}</button>`).join('');
 $('#rl').innerHTML=R.map((r,i)=>[r,i]).filter(([r])=>f==='ALL'||r[1]===f).map(([r,i])=>`<div class="rc" onclick="openR(${i})"><div class="fr">${ph(r[3],r[4])}<span class="vw">▶ ${r[2]}</span><span class="pl">▶</span><div class="pg"></div></div><h4>${r[0]}</h4><small>${r[1]} · 9:16</small></div>`).join('')}
 showR('ALL');
-function openR(i){$('#rb2').innerHTML=`<button class="btn" onclick="closeR()">CLOSE ✕</button>${ph(R[i][3],R[i][4])}`;$('#rm').classList.add('on')}
-function closeR(){$('#rm').classList.remove('on')}
+function openR(i){$('#rb2').innerHTML=`<button class="btn" onclick="closeR()">CLOSE ✕</button>${VIDEO.reels[i]?vf(VIDEO.reels[i],1,R[i][0]):ph(R[i][3],R[i][4])}`;$('#rm').classList.add('on')}
+function closeR(){$('#rm').classList.remove('on');$('#rb2').innerHTML=''}
 $('#dvv').innerHTML=ph('DAVINCI_EDIT_SCREENSHOT.png',28);
 $('#dtl').innerHTML=[[['#c8893f',30,'#8a5a2b',18,'#c8893f',24,'#5b6f86',28],'V2'],[['#8a5a2b',16,'#c8893f',34,'#5b6f86',22,'#c8893f',28],'V1'],[['#2f7d6d',40,'#2f7d6d',25,'#2f7d6d',35],'A1'],[['#7a4e8c',55,'#7a4e8c',45],'A2']].map(t=>`<div>${t[0].map((v,i)=>i%2?'':`<span style="background:${v};flex:${t[0][i+1]}"></span>`).join('')}</div>`).join('');
 let cur=0;
 function openP(i){cur=i;const p=P[i],n=P[(i+1)%P.length];
-$('#dc').innerHTML=`<div class="lab">${p[1]} · ${p[2]}</div><h2>${p[0]}</h2><div class="vid">${ph('PROJECT_VIDEO.mp4 — '+p[4],p[6])}</div>
+$('#dc').innerHTML=`<div class="lab">${p[1]} · ${p[2]}</div><h2>${p[0]}</h2><div class="vid">${VIDEO.projects[i]?vf(VIDEO.projects[i],0,p[0]):ph('PROJECT_VIDEO.mp4 — '+p[4],p[6])}</div>
 <p class="intro" style="max-width:40em;font-size:16px;color:var(--fg)">The goal of this project was to create a quiet cinematic atmosphere using pacing, music and natural light.</p>
 <div class="cols"><div><h4>MY ROLE</h4><ul><li>Video Editing</li><li>Color Grading</li><li>Sound Design</li></ul></div><div><h4>TOOLS</h4><ul><li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>After Effects</li></ul></div><div><h4>CREATIVE DIRECTION</h4><p style="color:var(--mut)">Slow pacing, minimal transitions and a warm cinematic grade were used to emphasize the atmosphere of the footage.</p></div></div>
 <div class="stills">${[1,2,3].map(k=>`<div>${ph('PROJECT_STILL_0'+k+'.jpg',p[6]+k*12)}</div>`).join('')}</div>
 <button class="btn p" onclick="openP(${(i+1)%P.length});$('#det').scrollTo(0,0)">NEXT PROJECT → ${n[0]}</button>`;
 $('#det').classList.add('on');$('#det').scrollTo(0,0);document.body.style.overflow='hidden'}
-function closeP(){$('#det').classList.remove('on');document.body.style.overflow=''}
-addEventListener('keydown',e=>e.key==='Escape'&&closeP());
-function playReel(){const r=$('#reel');r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.remove('on');void r.offsetWidth;r.classList.add('on');$('#rb').textContent='▶ NOW PLAYING'}
+function closeP(){$('#det').classList.remove('on');setTimeout(()=>{if(!$('#det').classList.contains('on'))$('#dc').innerHTML=''},800);document.body.style.overflow=''}
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeP();closeR()}});
+function playReel(){const r=$('#reel');r.scrollIntoView({behavior:'smooth',block:'center'});if(VIDEO.showreel){r.onclick=null;r.classList.add('v');r.innerHTML=vf(VIDEO.showreel,1,'Showreel');return}r.classList.remove('on');void r.offsetWidth;r.classList.add('on');$('#rb').textContent='▶ NOW PLAYING'}
 let ly=0;addEventListener('scroll',()=>{const y=scrollY,n=$('#nav');n.classList.toggle('h',y>ly&&y>innerHeight*.8);ly=y},{passive:true});
 const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('in')),{threshold:.12});
 document.querySelectorAll('.rv').forEach(e=>io.observe(e));
